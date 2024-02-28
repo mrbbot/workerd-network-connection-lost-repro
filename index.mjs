@@ -33,20 +33,22 @@ const body = new Uint8Array(200_000);
 const totalRequests = 10;
 let successfulRequests = 0;
 
-// Send requests to user worker through the proxy worker
-for (let i = 0; i < totalRequests; i++) {
-  const res = await fetch(proxy.url, {
-    method: "POST",
-    headers: { Target: user.url.href },
-    body,
-  });
-  if (res.ok) successfulRequests++;
+try {
+  // Send requests to user worker through the proxy worker
+  for (let i = 0; i < totalRequests; i++) {
+    const res = await fetch(proxy.url, {
+      method: "POST",
+      headers: { Target: user.url.href },
+      body,
+    });
+    if (res.ok) successfulRequests++;
+  }
+
+  assert.strictEqual(
+    successfulRequests, totalRequests,
+    "Expected all requests to be successful"
+  );
+} finally {
+  await user.kill();
+  await proxy.kill();
 }
-
-assert.strictEqual(
-  successfulRequests, totalRequests,
-  "Expected all requests to be successful"
-);
-
-await user.kill();
-await proxy.kill();
