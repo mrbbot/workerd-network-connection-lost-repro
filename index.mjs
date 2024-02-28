@@ -41,6 +41,7 @@ try {
       headers: { Target: user.url.href },
       body,
     });
+    console.log({ ok: res.ok });
     if (res.ok) successfulRequests++;
   }
 
