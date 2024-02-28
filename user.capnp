@@ -15,7 +15,8 @@ const worker :Workerd.Worker = (
     ( name = "index.mjs",
       esModule =
         `export default {
-        `  fetch(request, env, ctx) {
+        `  async fetch(request, env, ctx) {
+        `    // await request.arrayBuffer();
         `    return new Response("body");
         `  }
         `}
